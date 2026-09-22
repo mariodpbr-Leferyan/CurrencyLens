@@ -2,6 +2,43 @@
 
 A short routine to run at the start and end of every working session on CurrencyLens.
 
+## First-time setup (before Session 1)
+
+Do this once, before writing any code.
+
+### Prerequisites
+
+Before writing a single line of code, make sure you have:
+
+- Python 3.11+ installed (`python3 --version` in your terminal)
+- Git installed (`git --version`)
+- A code editor (VS Code, since it's already in your CV skills)
+- A GitHub account (you have one — `mariodpbr-Leferyan`)
+- An Anthropic or OpenAI API key (for the AI summary step later — not needed yet)
+- A folder where you keep your projects (e.g., `~/Projects/`)
+
+If any of these are missing, sort it out first before moving on.
+
+### Create the local project
+
+This is the first real task (not busywork):
+
+1. Open a terminal, go to wherever you keep projects, and create a folder called `CurrencyLens`.
+2. Move the three project docs (`README.md`, `PROGRESS.md`, `SESSION_CHECKLIST.md`) into it.
+3. Run `git init` inside it.
+4. Create a Python virtual environment (`python3 -m venv venv`) and activate it.
+5. Make your first commit: something like `git commit -m "Initial project structure"`.
+
+**Why this matters:** `git init` starts tracking every change from here on — that history is itself
+something you can point to (the commit log shows real, incremental work, not one giant dump). The
+virtual environment keeps this project's Python packages isolated from everything else on your
+machine, so dependencies don't clash between projects.
+
+After trying it, be ready to report:
+
+- What errors (if any) you hit
+- What `git status` shows after your first commit
+
 ## Start of session
 
 1. `cd` into the project folder.

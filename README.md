@@ -48,10 +48,60 @@ as opposed to using AI tools as a coding assistant, which is a different skill.
 - Claude or OpenAI API (for the summary step)
 - (Optional, later) Streamlit for a small dashboard
 
+## Project structure
+
+CurrencyLens is organised as a single Python package (`currencylens/`), with one module per stage of
+the pipeline described above, plus a `tests/` folder mirroring it one-to-one:
+
+```
+CurrencyLens/
+├── currencylens/
+│   ├── __init__.py       # makes this folder an importable package
+│   ├── config.py         # settings: currency pairs to track, file paths, etc.
+│   ├── fetch_rates.py    # Extract — calls the Frankfurter API
+│   ├── database.py       # Load — reads/writes the SQLite database
+│   ├── analysis.py       # Analyse — Pandas calculations (changes, moving averages)
+│   ├── summarize.py      # Summarise — calls the AI model
+│   └── main.py           # orchestrates the pipeline end to end
+├── tests/
+│   ├── test_fetch_rates.py
+│   ├── test_database.py
+│   ├── test_analysis.py
+│   └── test_summarize.py
+├── .gitignore
+├── requirements.txt
+├── README.md
+├── PROGRESS.md
+└── SESSION_CHECKLIST.md
+```
+
+Each pipeline stage is its own module so it can be tested independently (e.g. testing the Pandas
+calculations in `analysis.py` doesn't require a real database or a real API call). `main.py` is the
+only place that ties the stages together and is the entry point for actually running the pipeline.
+
+I considered the stricter "src layout" (`src/currencylens/` + a `pyproject.toml` to make the package
+properly installable) that's common in production Python projects, but decided against it for now:
+CurrencyLens isn't published as a library for other projects to depend on, it's a standalone script
+run via cron in GitHub Actions, so the extra packaging ceremony wasn't worth it. This structure can be
+migrated to a src layout later if the project ever needs it.
+
 ## Setup
 
-_This section will be filled in as the project takes shape — starting with a `requirements.txt` and
-instructions for setting up a virtual environment._
+1. Clone the repository and `cd` into it.
+2. Create and activate a virtual environment:
+   ```
+   python -m venv venv
+   venv\Scripts\activate      # Windows
+   source venv/bin/activate   # macOS/Linux
+   ```
+3. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+4. Run the pipeline (once `main.py` exists):
+   ```
+   python -m currencylens.main
+   ```
 
 ## License
 
