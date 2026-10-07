@@ -2,11 +2,14 @@
 
 from pathlib import Path
 
-# Extract
+# Extract information from Frankfurter API Base 
+# Uses "EUR" has base currency for comparation
+# Timout after 10 seconds if anything goes wrong
 API_BASE_URL = "https://api.frankfurter.dev/v1"
 BASE_CURRENCY = "EUR"
 REQUEST_TIMEOUT_SECONDS = 10
 
+# All 30 currencies supported by Frankfurt API
 TARGET_CURRENCIES = {
   "AUD": "Australian Dollar",
   "BRL": "Brazilian Real",

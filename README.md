@@ -18,7 +18,7 @@ useful for my portfolio.
 ## What it does
 
 1. **Extract** — pulls daily exchange rates for a set of currency pairs from the
-   [Frankfurter API](https://www.frankfurter.app/) (free, no API key required).
+   [Frankfurter API](https://frankfurter.dev/) (free, no API key required).
 2. **Load** — stores each day's rates in a local SQLite database, building a history over time.
 3. **Analyse** — uses Pandas to calculate day-over-day and week-over-week changes, and moving
    averages, once enough data has accumulated.

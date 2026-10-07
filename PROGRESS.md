@@ -92,6 +92,66 @@ committed and pushed. `config.py` has an empty placeholder file but no content y
 
 ---
 
+## Session 2 — October 6, 2026
+
+**Resumed at:** 15:08. **Pause since last session: 13 days, 21h 17min** (Sept 22, 17:51 → Oct 6,
+15:08).
+
+**What was done:**
+- Ran the start-of-session checklist: `git status` clean, `git pull` up to date. Noticed the
+  virtual environment wasn't active yet and activated it
+- Raised the question of a `docs/` folder and sprints/epics like in HomeBase. Decided on a lean docs
+  set (`ARCHITECTURE`, `DATA_MODEL`, `ROADMAP`, `PROJECT_MANAGEMENT`) and a HomeBase-style GitHub
+  Projects board (Epic, Sprint, Priority fields; Board and Table views) — both postponed to the next
+  session. Shared HomeBase's `ROADMAP.md` and `PROJECT_MANAGEMENT.md` to use as templates
+- Worked through the three `config.py` questions: which currencies to track (EUR as base; rates
+  between other currencies can be derived from EUR-based rates instead of fetched), the constant
+  naming convention (`UPPER_SNAKE_CASE`, PEP 8), and which settings belong in a config file (values
+  that may change without touching logic, or that several modules need)
+- Researched the data source: the BIS 2025 ranking of most traded currencies, and the Frankfurter
+  docs — base URL `https://api.frankfurter.dev/v1`, parameters `base` and `symbols`, 30 supported
+  currencies, rates published on working days around 16:00 CET. The Angolan kwanza (AOA) isn't
+  supported, so it's left out for now; a second data source could be added later
+- Wrote `currencylens/config.py`: `API_BASE_URL`, `BASE_CURRENCY`, `REQUEST_TIMEOUT_SECONDS`,
+  `TARGET_CURRENCIES` (dict of code → name for the 29 supported currencies other than EUR),
+  `PROJECT_ROOT` / `DB_PATH` (built with `pathlib`, so the database always lands in the project
+  root), and `MOVING_AVERAGE_WINDOWS`
+- Code review fixes on `config.py`: removed `DATE` (it was missing its imports, and a value computed
+  at import time doesn't belong in a config file — dynamic values belong in the logic), turned the
+  URL comment into a constant, removed `EUR` from the targets, PEP 8 formatting (4 spaces, closing
+  brace on its own line, trailing comma), and added comments in my own voice
+- Verified the file imports cleanly and `DB_PATH` points at `CurrencyLens\currencylens.db`
+- Added `currencylens.db` to `.gitignore`, then committed and pushed `config.py`
+
+**Session end: 17:13. Total time: 2h 05min.** No pauses.
+
+**Status at end of session:** `config.py` is complete and pushed. Nothing else has code yet.
+
+**Reminders for next session:**
+- Create the `docs/` folder with the lean set (`ARCHITECTURE`, `DATA_MODEL`, `ROADMAP`,
+  `PROJECT_MANAGEMENT`), using HomeBase's `ROADMAP.md` and `PROJECT_MANAGEMENT.md` as templates
+  (share them again, since I don't keep them between sessions)
+- Set up the GitHub Projects board: Epic, Sprint and Priority fields, labels, Board and Table views
+- Fix the outdated Frankfurter link in `README.md` (the docs are at `frankfurter.dev/v1`)
+- Start `fetch_rates.py` (Extract): call the `/latest` endpoint with `requests`, using the settings
+  from `config.py`, including the timeout
+- Write `DATA_MODEL.md` (the SQLite table design) before starting `database.py`
+- When reaching the automation stage: decide how the rate history persists, since GitHub Actions
+  runners are temporary and `currencylens.db` is ignored by Git
+- Later: add a formatter/linter (Ruff or Black) to the project, and consider a second data source
+  for currencies Frankfurter doesn't cover (such as AOA)
+
+---
+
+## Session 3 — October 7, 2026
+
+**Resumed at:** 14:39. **Pause since last session: 21h 26min** (Oct 6, 17:13 → Oct 7, 14:39).
+
+**What was done so far this session:**
+-
+
+---
+
 ## Template for future sessions
 
 Copy this block for each new session:
