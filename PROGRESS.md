@@ -212,7 +212,65 @@ Copy this block for each new session:
 **Resumed at:** 12:24. **Pause since last session: 11 days, 18h 07min** (Oct 7, 18:17 → Oct 19,
 12:24).
 
-**What was done so far this session:****
+**What was done:**
+- Ran the start-of-session checklist. Found that the Session 3 entry I had saved in `PROGRESS.md` was
+  missing again from the file on disk, and `git log` showed only one commit touching it. Most likely
+  an older copy kept open in the editor was saved over the newer file. Fixed by turning on Auto Save
+  in VS Code, committing the Session 3 entry, and adding this Session 4 block by hand
+- Fixed the three bugs in `fetch_rates.py` found in the Session 3 review: defined the
+  `RatesFetchError` class, changed `from API_BASE_URL` to `from error`, and replaced the mangled
+  `datefromisoformat` with `ValueError`. Learned why they only showed up on failure: Python looks
+  names up only when a line runs, so the success path never touched them
+- Re-ran both failure experiments with the fixed code (typo in the URL, 0.001 s timeout): each ends
+  in `RatesFetchError`, and `raise ... from error` keeps the original cause visible. Reverted the URL
+  and `REQUEST_TIMEOUT_SECONDS`, and checked that `config.py` is back to 10 s
+- Saw how the same function can be checked without the network: Claude ran five cases (success,
+  timeout, HTTP 404, missing `date` key, invalid date) against a fake `requests.get`, and all five
+  behaved as intended. This is the idea behind the mocked tests I will write next
+- Cleaned up the style: docstring with a summary line, `Returns:` and `Raises:` sections, the
+  decorator directly above the class, no trailing spaces, no space before a call's parenthesis, and
+  PEP 8 blank lines and indentation (two small layout points were still open at the end)
+- Created a scratch file (`try_fetch.py`) so the failure tests can be re-run with one short command
+  instead of a long one-liner with quotes
+
+**Pause flagged at 14:00 (break)** — resumed at 15:08, only to wrap up. **Pause duration: 1h 08min.**
+
+**Session end: 15:08. Total time: 1h 36min** (12:24 → 14:00, excluding the pause).
+
+**Status at end of session:** `fetch_latest_rates()` is complete and tested by hand for success,
+timeout and HTTP errors, with `RatesFetchError` as its single failure type. Two small layout fixes
+are left (two blank lines around `RatesFetchError`, and the indentation of the `RatesSnapshot(`
+arguments). The new code is not committed yet. No automated tests exist yet.
+
+**Reminders for next session:**
+- Finish the two layout fixes in `fetch_rates.py`, delete the scratch files `demo.py` and
+  `try_fetch.py`, then commit and push `fetch_rates.py` and `PROGRESS.md` (`git status` first)
+- Move the finished cards (write `fetch_rates.py`, clean structure, error handling) to Done on the
+  board
+- Confirm the Frankfurter link in `README.md` was fixed to `https://frankfurter.dev/`
+- Check that `pytest` is installed in the venv (`pip list`); if not, install it and update
+  `requirements.txt` with `pip freeze`
+- Write the tests for `fetch_rates.py` with a mocked HTTP call: first understand what mocking is and
+  why tests must never touch the real network, then write the success case and the failure cases
+  (timeout, HTTP error, missing key, invalid date)
+- Keep VS Code Auto Save on, and check the tab for an unsaved dot before closing a session
+- Before starting `database.py`: write `docs/DATA_MODEL.md`
+- Later: decide how the rate history persists in GitHub Actions, add Ruff or Black (it would have
+  caught the undefined names and the layout issues), and consider a second data source for AOA
+
+---
+
+## Template for future sessions
+
+Copy this block for each new session:
+
+```
+## Session N — <date>
+
+**Started at:** <time> (or **Resumed at:** <time> — **Pause since last session:** <duration>, if
+opening a new session block for a session that continues later)
+
+**What was done so far this session:**
 -
 
 **Pause flagged at <time> (<reason>)** — resumed at <time>. **Pause duration: <duration>.**
