@@ -147,8 +147,58 @@ committed and pushed. `config.py` has an empty placeholder file but no content y
 
 **Resumed at:** 14:39. **Pause since last session: 21h 26min** (Oct 6, 17:13 → Oct 7, 14:39).
 
-**What was done so far this session:**
--
+**What was done:**
+- Ran the start-of-session checklist and re-read the reminders from Session 2
+- Created the `docs/` folder with `ROADMAP.md` (phases 0–6, each with goal, what it involves, done
+  criteria and who writes what) and `PROJECT_MANAGEMENT.md` (board setup, issue workflow, backlog by
+  sprint), using HomeBase's versions as templates
+- Set up the GitHub Projects board: fields (Status, Epic, Sprint, Priority), labels, and the Board and
+  Table views. Learned where Epics and Sprints are created and how to set them on each issue
+- Designed `fetch_rates.py` before writing it: it returns only the date plus one rate per currency.
+  The "amount to compare" feature is not part of Extract — it will be computed locally later as
+  `amount × rate`, in `analysis.py` or the interface
+- Compared three ways to return the data (tuple, dict, frozen dataclass) with a small runnable demo,
+  and chose a frozen dataclass, `RatesSnapshot(date, rates)`: named fields instead of positions, typo
+  protection from the editor, and attributes that can't be reassigned
+- Wrote `fetch_latest_rates()`: builds the URL and parameters from `config.py`, calls the API with
+  `requests.get(..., timeout=...)`, checks the status with `raise_for_status()`, reads the JSON, and
+  converts the date string with `date.fromisoformat()`. A live call returned the rates for
+  2026-10-07: 29 currencies, matching `TARGET_CURRENCIES`
+- Ran two failure experiments to see how the code breaks: a typo in the URL gave `HTTPError` (404,
+  raised by `raise_for_status()`), and a 0.001 s timeout gave `ReadTimeout` (raised by
+  `requests.get`). Learned to read a traceback from the last line upward, and that both exceptions
+  inherit from `requests.exceptions.RequestException`
+- Started the error handling: a custom `RatesFetchError`, a short `try/except` around the network
+  call that re-raises with `raise ... from error`, and a second one that checks the response format
+- Code review found three bugs that only appear when something fails — `RatesFetchError` was never
+  defined, `from API_BASE_URL` should be `from error`, and `datefromisoformat` should be `ValueError`.
+  The success run hid them because Python only looks up names when the line runs. Also noted PEP 8
+  fixes (two blank lines between top-level definitions, no space before a call's parenthesis,
+  indentation, trailing spaces, docstring layout with a `Raises:` section) and the typo "ne date"
+
+**Session end: 18:17. Total time: 3h 38min.** No pauses.
+
+**Status at end of session:** `fetch_latest_rates()` works for the success case. The error handling is
+written but not finished: the three bugs above still need fixing, and the failure cases have to be
+re-tested. Docs and the board are done. Nothing from `fetch_rates.py` is committed yet.
+
+**Reminders for next session:**
+- Fix the three bugs and the style points in `fetch_rates.py`, then re-run both failure experiments
+  (URL typo and 0.001 s timeout): each must end in `RatesFetchError` with the "direct cause" line
+  above it
+- After the experiments, put the URL back to `/latest` and `REQUEST_TIMEOUT_SECONDS` back to `10`,
+  and check with `git diff` that `config.py` is unchanged
+- Delete any scratch files (`demo.py`, `try_fetch.py`) so they are not committed
+- Commit and push `fetch_rates.py`; move the finished cards (write `fetch_rates.py`, clean structure,
+  error handling) to Done on the board
+- Fix the outdated Frankfurter link in `README.md` (`https://frankfurter.dev/`), if not done yet
+- Write the tests for `fetch_rates.py` with a mocked HTTP call (first: what mocking is and why tests
+  must never touch the real network)
+- Check that the docs, README and `PROGRESS.md` changes from this session are on GitHub
+  (`git status` and `git log --oneline -5`)
+- Before starting `database.py`: write `docs/DATA_MODEL.md`
+- Later: decide how the rate history persists in GitHub Actions, add Ruff or Black (a linter would
+  have caught the undefined names), and consider a second data source for AOA
 
 ---
 
