@@ -207,12 +207,12 @@ re-tested. Docs and the board are done. Nothing from `fetch_rates.py` is committ
 Copy this block for each new session:
 
 ```
-## Session N — <date>
+## Session 4 — October 19, 2026
 
-**Started at:** <time> (or **Resumed at:** <time> — **Pause since last session:** <duration>, if
-opening a new session block for a session that continues later)
+**Resumed at:** 12:24. **Pause since last session: 11 days, 18h 07min** (Oct 7, 18:17 → Oct 19,
+12:24).
 
-**What was done so far this session:**
+**What was done so far this session:****
 -
 
 **Pause flagged at <time> (<reason>)** — resumed at <time>. **Pause duration: <duration>.**
