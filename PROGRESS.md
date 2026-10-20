@@ -202,11 +202,6 @@ re-tested. Docs and the board are done. Nothing from `fetch_rates.py` is committ
 
 ---
 
-## Template for future sessions
-
-Copy this block for each new session:
-
-```
 ## Session 4 — October 19, 2026
 
 **Resumed at:** 12:24. **Pause since last session: 11 days, 18h 07min** (Oct 7, 18:17 → Oct 19,
@@ -259,29 +254,58 @@ arguments). The new code is not committed yet. No automated tests exist yet.
   caught the undefined names and the layout issues), and consider a second data source for AOA
 
 ---
+## Session 5 — October 20, 2026
 
-## Template for future sessions
+**Resumed at:** 12:50. **Pause since last session: 21h 42min** (Oct 19, 15:08 → Oct 20, 12:50).
 
-Copy this block for each new session:
+**What was done:**
+- Ran the start-of-session checklist and fixed the layout of `PROGRESS.md`: the Session 4 entry had
+  been pasted inside the template's code fence, so it showed up as a code block
+- Learned what mocking is and why a test must never call the real API (it would be slow, depend on
+  the internet, and the answer changes every day). A mock is a stand-in for `requests.get` that
+  returns exactly what I tell it to, or raises the exception I choose. The rule to remember: patch
+  the name where it is used, so the target is `currencylens.fetch_rates.requests.get`
+- Installed `pytest` and regenerated `requirements.txt`. Noticed the old file was UTF-16 (a side
+  effect of PowerShell's `>` redirect), so I regenerated it with `pip freeze | Out-File -Encoding utf8`
+- Wrote my first test, `test_fetch_latest_rates_returns_snapshot`, with a `make_response` helper, and
+  got it passing. Learned the two sides of a test (the fake API answer is the input, the
+  `RatesSnapshot` is the expected output), that the call to the function goes inside the `with`
+  block, and to run the tests with `python -m pytest` so the `currencylens` package can be imported
+- Started the failure tests (timeout and HTTP error): learned `side_effect` (raise an exception)
+  versus `return_value` (hand back an object), and `pytest.raises` (the block must raise that
+  exception). The code is written but still has typos and does not run yet
 
-```
-## Session N — <date>
+**Session end: 17:45. Total time: 4h 55min.** No pauses flagged.
 
-**Started at:** <time> (or **Resumed at:** <time> — **Pause since last session:** <duration>, if
-opening a new session block for a session that continues later)
-
-**What was done so far this session:**
--
-
-**Pause flagged at <time> (<reason>)** — resumed at <time>. **Pause duration: <duration>.**
-
-**What was done after resuming (<time> → <time or "session end">):**
--
-
-**Session end: <time>. Total time: <duration>.**
-
-**Status at end of session:**
+**Status at end of session:** One test passes (success case). `tests/test_fetch_rates.py` also
+contains the timeout and HTTP-error tests, but with several typos, so running the whole file fails.
+The two bad-payload tests (missing `date` key, invalid date) are not written yet. The test file is
+not committed on purpose, so that only passing tests go to GitHub. `requirements.txt` now includes
+`pytest` and its helper packages.
 
 **Reminders for next session:**
--
-```
+- Finish `tests/test_fetch_rates.py`, in this order:
+  1. Imports: add `import requests`; group them as standard library (`datetime`, `unittest.mock`),
+     then a blank line, then third-party (`pytest`, `requests`), then a blank line, then my own
+     package
+  2. Timeout test: the patch path must be `currencylens.fetch_rates.requests.get` (it says
+     `currency.`), the exception is `requests.exceptions.Timeout` (it says `request.exception`), and
+     the `with` line needs its colon
+  3. HTTP-error test: call the helper, `make_response({})` (the parentheses are missing), use
+     `requests.exceptions.HTTPError` (it says `request.`), and fix `mock.pach` → `mock.patch`
+  4. Write the two remaining tests myself: a payload with no `"date"` key, and a payload with an
+     invalid date string. Both must raise `RatesFetchError`
+  5. Tidy: two blank lines between functions, no trailing spaces, a newline at the end of the file,
+     and `requests.Response` in the helper's docstring
+- Run `python -m pytest -v` and expect 5 passed. Then check the tests can fail: comment out
+  `response.raise_for_status()` in `fetch_rates.py`, see which test fails, and restore the line
+- Look at `pytest.mark.parametrize` as a tidier way to write the two bad-payload tests as one
+- Commit and push `tests/test_fetch_rates.py` (once green), `requirements.txt` and `PROGRESS.md`;
+  check `git status` first. Move the finished cards on the board to Done
+- Confirm the Frankfurter link in `README.md` was fixed to `https://frankfurter.dev/`
+- Keep VS Code Auto Save on, and check the tab for an unsaved dot before closing a session
+- Before starting `database.py`: write `docs/DATA_MODEL.md`
+- Later: decide how the rate history persists in GitHub Actions, add Ruff or Black, and consider a
+  second data source for AOA
+
+---
