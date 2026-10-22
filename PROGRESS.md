@@ -315,7 +315,51 @@ not committed on purpose, so that only passing tests go to GitHub. `requirements
 12:39).
 
 **What was done so far this session:**
--
+- Ran the start-of-session checklist: `git status` showed only `PROGRESS.md` and the test file as
+  modified, and the Session 5 commit with `pytest` in `requirements.txt` was already pushed
+- Fixed the typos in `tests/test_fetch_rates.py` (`request` vs `requests`, a wrong patch path, a
+  helper called without parentheses, `mock.pach`, a missing colon) and wrote the remaining two tests
+  (missing date, invalid date) following the pattern of the first one
+
+**Pause flagged at 13:24 (lunch)** — resumed at 15:29. **Pause duration: 2h 05min.**
+
+**What was done after resuming (15:29 → 17:05):**
+- Read my first full pytest output: the percentages are progress through the run (each of 5 tests is
+  20%), not a score; the result is the `PASSED` or `FAILED` next to each test and the last line
+- Understood my 5th test failing: it used `pytest.raises(ValueError)`, but the function turns that
+  `ValueError` into a `RatesFetchError`, so the code was right and the test was wrong. Learned to
+  read the chained output ("direct cause of the following exception") and to ask whether the test
+  or the code is at fault by checking the documented contract
+- Added a check on the cause with `pytest.raises(...) as exc_info` and
+  `isinstance(exc_info.value.__cause__, ValueError)`. Fixed an indentation mistake that put the
+  `assert` outside the test and made pytest fail while loading the file
+- Checked that the tests can fail: with `raise_for_status()` commented out, the HTTP-error test still
+  passed, because the fake response had an empty payload and the missing `date` key raised a
+  `RatesFetchError` by accident. Fixed it by giving that test a valid payload, then saw it fail with
+  "DID NOT RAISE" when the line was disabled, and pass again when restored
+- Learned that a test should have one reason to fail, and how `match=` in `pytest.raises` checks the
+  error message ("Could not fetch rates" for network and HTTP errors, "Unexpected response format"
+  for bad payloads) so each test pins down the path it checks
+- Final result: 5 tests passing (success, timeout, HTTP error, missing date, invalid date). Committed
+  and pushed the tests and `PROGRESS.md`. The README now links to `https://frankfurter.dev/`
+
+**Session end: 17:05. Total time: 2h 21min** (45 min before lunch + 1h 36min after, excluding the
+2h 05min pause).
+
+**Status at end of session:** Sprint 1 code is complete: `fetch_latest_rates()` works against the
+live API, fails with a single `RatesFetchError`, and has five mocked tests that pass without
+network access. Everything is pushed to GitHub.
+
+**Reminders for next session:**
+- Move the finished Sprint 1 cards on the board to Done, and put the next card in progress
+- Start Sprint 2 with `docs/DATA_MODEL.md` (the SQLite table design) before writing `database.py`:
+  what one row represents (one date and one currency), the columns, and how to avoid inserting the
+  same day twice
+- Optional: use `pytest.mark.parametrize` to merge the two bad-payload tests into one
+- Then `docs/ARCHITECTURE.md`, and `database.py` (connection and table creation)
+- Keep VS Code Auto Save on, and check the tab for an unsaved dot before closing a session
+- Later: decide how the rate history persists in GitHub Actions, add Ruff or Black, and consider a
+  second data source for AOA
 
 ---
 
