@@ -309,3 +309,38 @@ not committed on purpose, so that only passing tests go to GitHub. `requirements
   second data source for AOA
 
 ---
+## Session 6 — October 22, 2026
+
+**Resumed at:** 12:39. **Pause since last session: 1 day, 18h 54min** (Oct 20, 17:45 → Oct 22,
+12:39).
+
+**What was done so far this session:**
+-
+
+---
+
+## Template for future sessions
+
+Copy this block for each new session:
+
+```
+## Session N — <date>
+
+**Started at:** <time> (or **Resumed at:** <time> — **Pause since last session:** <duration>, if
+opening a new session block for a session that continues later)
+
+**What was done so far this session:**
+-
+
+**Pause flagged at <time> (<reason>)** — resumed at <time>. **Pause duration: <duration>.**
+
+**What was done after resuming (<time> → <time or "session end">):**
+-
+
+**Session end: <time>. Total time: <duration>.**
+
+**Status at end of session:**
+
+**Reminders for next session:**
+-
+```
